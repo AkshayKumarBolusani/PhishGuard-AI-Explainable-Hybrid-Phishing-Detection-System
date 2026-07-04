@@ -6,6 +6,7 @@ free provider detection, and domain reputation scoring.
 """
 
 import re
+
 import structlog
 
 logger = structlog.get_logger(__name__)
@@ -103,10 +104,9 @@ class SenderAnalyzer:
 
         # Check if display name looks like an email address different from actual
         email_in_display = re.search(r'[\w.+-]+@[\w-]+\.[\w.-]+', display_name)
-        if email_in_display and email_in_display.group(0).lower() != email.lower():
-            return True
-
-        return False
+        return bool(
+            email_in_display and email_in_display.group(0).lower() != email.lower()
+        )
 
     def _check_typosquatting(self, domain: str) -> str:
         """Check if domain is a known typosquat of a legitimate brand."""

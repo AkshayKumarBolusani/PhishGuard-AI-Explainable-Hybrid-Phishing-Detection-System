@@ -1,13 +1,16 @@
 """PhishGuard AI — Auth Service"""
 import structlog
+
+from app.core.config import get_settings
 from app.core.exceptions import AuthenticationError, DuplicateError, NotFoundError
 from app.core.security import (
-    create_access_token, generate_api_key, generate_uuid,
-    hash_password, verify_password,
+    create_access_token,
+    generate_api_key,
+    hash_password,
+    verify_password,
 )
-from app.core.config import get_settings
-from app.repositories.user_repository import UserRepository
 from app.repositories.api_key_repository import APIKeyRepository
+from app.repositories.user_repository import UserRepository
 
 logger = structlog.get_logger(__name__)
 

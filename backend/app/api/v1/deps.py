@@ -1,8 +1,9 @@
 """PhishGuard AI — Auth Dependencies"""
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
-from app.core.security import decode_access_token
+
 from app.core.exceptions import AuthenticationError
+from app.core.security import decode_access_token
 
 security = HTTPBearer(auto_error=False)
 

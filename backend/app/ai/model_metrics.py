@@ -9,7 +9,7 @@ from __future__ import annotations
 import json
 import threading
 from collections import deque
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -76,7 +76,7 @@ def save_model_metrics(metrics: dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     payload = {
         **metrics,
-        "updated_at": datetime.now(timezone.utc).isoformat(),
+        "updated_at": datetime.now(UTC).isoformat(),
     }
     path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
     logger.info("model_metrics_saved", path=str(path))

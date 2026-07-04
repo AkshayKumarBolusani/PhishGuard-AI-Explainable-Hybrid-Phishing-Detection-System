@@ -1,5 +1,5 @@
 """PhishGuard AI — Auth Schemas"""
-from pydantic import BaseModel, Field, EmailStr
+from pydantic import BaseModel, Field
 
 
 class UserRegister(BaseModel):

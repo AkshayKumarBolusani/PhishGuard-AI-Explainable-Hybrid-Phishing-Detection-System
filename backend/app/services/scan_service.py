@@ -5,8 +5,9 @@ Orchestrates the scan workflow: validates input, runs AI pipeline, stores result
 """
 
 import json
-import structlog
 from typing import Any
+
+import structlog
 
 from app.ai.pipeline import PhishingPipeline
 from app.core.security import generate_uuid

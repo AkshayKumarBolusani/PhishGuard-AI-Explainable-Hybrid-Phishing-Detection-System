@@ -6,7 +6,7 @@ JWT token management, password hashing, and API key generation.
 
 import secrets
 import uuid
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 
 from jose import JWTError, jwt
 from passlib.context import CryptContext
@@ -36,10 +36,10 @@ def create_access_token(
     settings = get_settings()
     to_encode = data.copy()
 
-    expire = datetime.now(timezone.utc) + (
+    expire = datetime.now(UTC) + (
         expires_delta or timedelta(minutes=settings.jwt_expiration_minutes)
     )
-    to_encode.update({"exp": expire, "iat": datetime.now(timezone.utc)})
+    to_encode.update({"exp": expire, "iat": datetime.now(UTC)})
 
     return jwt.encode(
         to_encode,

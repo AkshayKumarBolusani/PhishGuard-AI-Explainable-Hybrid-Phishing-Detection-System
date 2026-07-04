@@ -9,18 +9,18 @@ Runs all detection layers in sequence and produces a unified, weighted predictio
 """
 
 import time
-import json
-import structlog
 from typing import Any
 
-from app.ai.rule_engine import RuleEngine
-from app.ai.ml_classifier import MLClassifier
-from app.ai.transformer_classifier import TransformerClassifier
-from app.ai.llm_explainer import LLMExplainer
-from app.ai.nlp_features import NLPFeatureExtractor
-from app.ai.url_analyzer import URLAnalyzer
-from app.ai.sender_analyzer import SenderAnalyzer
+import structlog
+
 from app.ai.highlighter import TextHighlighter
+from app.ai.llm_explainer import LLMExplainer
+from app.ai.ml_classifier import MLClassifier
+from app.ai.nlp_features import NLPFeatureExtractor
+from app.ai.rule_engine import RuleEngine
+from app.ai.sender_analyzer import SenderAnalyzer
+from app.ai.transformer_classifier import TransformerClassifier
+from app.ai.url_analyzer import URLAnalyzer
 
 logger = structlog.get_logger(__name__)
 

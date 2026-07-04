@@ -2,7 +2,7 @@
 
 import json
 from collections import defaultdict
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 
 from app.repositories.feedback_repository import FeedbackRepository
 from app.repositories.scan_repository import ScanRepository
@@ -17,7 +17,7 @@ class DashboardService:
         stats = self.scan_repo.get_statistics(user_id)
         rows = self.scan_repo.find_by_user(user_id)
 
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
         today = now.date()
         week_ago = today - timedelta(days=7)
 
@@ -31,7 +31,7 @@ class DashboardService:
     def get_trends(self, user_id: str | None = None, days: int = 30) -> list[dict]:
         rows = self.scan_repo.find_by_user(user_id)
 
-        now = datetime.now(timezone.utc).date()
+        now = datetime.now(UTC).date()
         start = now - timedelta(days=days)
         trends: dict[str, dict] = {}
 

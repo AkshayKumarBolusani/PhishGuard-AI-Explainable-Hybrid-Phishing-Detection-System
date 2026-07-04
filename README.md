@@ -8,8 +8,8 @@
 [![Docker](https://img.shields.io/badge/Docker-Ready-2496ED.svg)](https://www.docker.com/)
 [![CI](https://img.shields.io/badge/CI-GitHub%20Actions-2088FF.svg)](.github/workflows/ci.yml)
 [![Tests](https://img.shields.io/badge/tests-pytest-blue.svg)](.github/workflows/ci.yml)
-[![Code style](https://img.shields.io/badge/code%20style-flake8-blue.svg)](.github/workflows/ci.yml)
-[![Type check](https://img.shields.io/badge/type%20check-mypy-blue.svg)](.github/workflows/ci.yml)
+[![Code style](https://img.shields.io/badge/code%20style-ruff-blue.svg)](.github/workflows/ci.yml)
+[![Lint](https://img.shields.io/badge/lint-oxlint-blue.svg)](.github/workflows/ci.yml)
 
 **PhishGuard AI** is a full-stack phishing email detection platform that combines rule-based detection, classical ML, NLP, and LLM explainability into an **interpretable analysis platform** inspired by SOC workflows.
 
@@ -224,7 +224,7 @@ Live inference and API latency via `/api/v1/metrics` — populated after real sc
 | React pages | 6 |
 | Detection rules | 29 |
 | AI engines | 4 |
-| Testing | pytest + GitHub Actions (flake8, mypy, frontend build) |
+| Testing | pytest + GitHub Actions (ruff, oxlint, frontend build) |
 
 ---
 

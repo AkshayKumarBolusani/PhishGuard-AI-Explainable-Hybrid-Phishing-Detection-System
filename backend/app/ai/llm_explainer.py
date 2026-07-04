@@ -6,14 +6,15 @@ Includes a sophisticated template-based mock fallback for offline operation.
 """
 
 import json
-import structlog
 from typing import Any
+
+import structlog
 
 from app.core.config import get_settings
 
 logger = structlog.get_logger(__name__)
 
-SYSTEM_PROMPT = """You are a senior cybersecurity analyst at a Security Operations Center (SOC). 
+SYSTEM_PROMPT = """You are a senior cybersecurity analyst at a Security Operations Center (SOC).
 Your task is to analyze an email and provide a detailed security assessment.
 
 You must respond ONLY with valid JSON matching this exact schema:
@@ -47,7 +48,6 @@ class LLMExplainer:
     def _init_client(self) -> None:
         """Initialize the OpenAI-compatible client."""
         try:
-            import httpx
             self.is_available = True
             logger.info("llm_client_initialized", provider=self.settings.llm_provider)
         except Exception as e:
@@ -148,7 +148,7 @@ Provide your JSON security assessment."""
                     url_issues.append(f"Suspicious URL: {url.get('original_url', '')[:80]} ({', '.join(reasons)})")
 
         # Build summary based on classification
-        categories = list(set(ind.get("category", "") for ind in indicators))
+        categories = list({ind.get("category", "") for ind in indicators})
         cat_str = ", ".join(categories[:3]) if categories else "general"
 
         if classification == "phishing":

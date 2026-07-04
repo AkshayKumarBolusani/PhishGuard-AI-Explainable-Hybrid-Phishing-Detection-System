@@ -2,8 +2,10 @@
 PhishGuard AI — API Key Repository
 """
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
+
+from pymongo import ReturnDocument
 
 from app.core.security import generate_uuid
 from app.database.mongodb import (
@@ -11,8 +13,6 @@ from app.database.mongodb import (
     get_collection,
     paginate_query,
 )
-from pymongo import ReturnDocument
-
 from app.repositories.base import BaseRepository
 
 
@@ -30,7 +30,7 @@ class APIKeyRepository(BaseRepository):
             "key_prefix": data["key_prefix"],
             "name": data.get("name", "default"),
             "is_active": True,
-            "created_at": datetime.now(timezone.utc).isoformat(),
+            "created_at": datetime.now(UTC).isoformat(),
             "last_used": None,
             "expires_at": data.get("expires_at"),
         }
@@ -86,5 +86,5 @@ class APIKeyRepository(BaseRepository):
     def update_last_used(self, key_id: str) -> None:
         self.collection.update_one(
             {"id": key_id},
-            {"$set": {"last_used": datetime.now(timezone.utc).isoformat()}},
+            {"$set": {"last_used": datetime.now(UTC).isoformat()}},
         )

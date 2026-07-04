@@ -4,8 +4,10 @@ PhishGuard AI — Feedback Repository
 Stores user feedback on scan predictions for future model retraining.
 """
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
+
+from pymongo import ReturnDocument
 
 from app.core.security import generate_uuid
 from app.database.mongodb import (
@@ -13,8 +15,6 @@ from app.database.mongodb import (
     get_collection,
     paginate_query,
 )
-from pymongo import ReturnDocument
-
 from app.repositories.base import BaseRepository
 
 
@@ -32,7 +32,7 @@ class FeedbackRepository(BaseRepository):
             "correct_label": data.get("correct_label", ""),
             "feedback_text": data.get("feedback_text", ""),
             "is_correct": bool(data.get("is_correct", True)),
-            "created_at": datetime.now(timezone.utc).isoformat(),
+            "created_at": datetime.now(UTC).isoformat(),
         }
         self.collection.insert_one(record)
         return record

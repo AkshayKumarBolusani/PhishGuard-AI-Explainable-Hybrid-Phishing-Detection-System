@@ -6,7 +6,6 @@ Identifies and marks suspicious phrases with character offsets for frontend rend
 
 import re
 
-
 HIGHLIGHT_PATTERNS = {
     "urgency": [
         r"\b(urgent|immediately|right away|act now|asap|hurry|quickly)\b",

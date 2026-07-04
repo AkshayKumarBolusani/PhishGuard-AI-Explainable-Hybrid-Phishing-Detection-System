@@ -4,8 +4,10 @@ PhishGuard AI — User Repository
 Handles all user data persistence operations via MongoDB.
 """
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
+
+from pymongo import ReturnDocument
 
 from app.core.security import generate_uuid
 from app.database.mongodb import (
@@ -13,8 +15,6 @@ from app.database.mongodb import (
     get_collection,
     paginate_query,
 )
-from pymongo import ReturnDocument
-
 from app.repositories.base import BaseRepository
 
 
@@ -27,7 +27,7 @@ class UserRepository(BaseRepository):
         self.collection = get_collection(self.COLLECTION)
 
     def create(self, data: dict[str, Any]) -> dict[str, Any]:
-        now = datetime.now(timezone.utc).isoformat()
+        now = datetime.now(UTC).isoformat()
         record = {
             "id": generate_uuid(),
             "email": data["email"].lower().strip(),
@@ -73,7 +73,7 @@ class UserRepository(BaseRepository):
         )
 
     def update(self, record_id: str, data: dict[str, Any]) -> dict[str, Any] | None:
-        data = {**data, "updated_at": datetime.now(timezone.utc).isoformat()}
+        data = {**data, "updated_at": datetime.now(UTC).isoformat()}
         result = self.collection.find_one_and_update(
             {"id": record_id},
             {"$set": data},
@@ -92,5 +92,5 @@ class UserRepository(BaseRepository):
     def update_last_login(self, user_id: str) -> None:
         self.collection.update_one(
             {"id": user_id},
-            {"$set": {"last_login": datetime.now(timezone.utc).isoformat()}},
+            {"$set": {"last_login": datetime.now(UTC).isoformat()}},
         )

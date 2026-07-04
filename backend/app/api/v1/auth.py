@@ -1,9 +1,10 @@
 """PhishGuard AI — Auth API Routes"""
 from fastapi import APIRouter, Depends, HTTPException
+
 from app.api.v1.deps import require_auth
-from app.schemas.auth import UserRegister, UserLogin, APIKeyCreate
-from app.services.auth_service import AuthService
 from app.core.exceptions import AppException
+from app.schemas.auth import APIKeyCreate, UserLogin, UserRegister
+from app.services.auth_service import AuthService
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 auth_service = AuthService()

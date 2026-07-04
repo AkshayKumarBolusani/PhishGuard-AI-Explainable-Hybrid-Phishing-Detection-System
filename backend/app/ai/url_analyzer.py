@@ -7,6 +7,7 @@ IP address URLs, homograph detection, suspicious TLD detection, reputation scori
 
 import re
 from urllib.parse import urlparse
+
 import structlog
 
 logger = structlog.get_logger(__name__)

@@ -5,7 +5,6 @@ Production-ready FastAPI application with security middleware, structured loggin
 rate limiting, and modular API routing.
 """
 
-import time
 from contextlib import asynccontextmanager
 
 import structlog
@@ -102,10 +101,10 @@ def create_app() -> FastAPI:
         )
 
     # ── Routes ──────────────────────────────────────────────
-    from app.api.v1.scan import router as scan_router
-    from app.api.v1.history import router as history_router
     from app.api.v1.dashboard import router as dashboard_router
     from app.api.v1.health import router as health_router
+    from app.api.v1.history import router as history_router
+    from app.api.v1.scan import router as scan_router
 
     app.include_router(scan_router, prefix="/api/v1")
     app.include_router(history_router, prefix="/api/v1")

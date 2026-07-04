@@ -6,6 +6,7 @@ Gracefully falls back to ML classifier if transformers are not installed.
 """
 
 import structlog
+
 from app.core.config import get_settings
 
 logger = structlog.get_logger(__name__)
@@ -27,8 +28,8 @@ class TransformerClassifier:
     def _try_load(self) -> None:
         """Attempt to load transformer model."""
         try:
+            import torch  # noqa: F401 — verify torch is installed before loading transformers
             from transformers import AutoModelForSequenceClassification, AutoTokenizer
-            import torch
 
             self.tokenizer = AutoTokenizer.from_pretrained(self.model_name)
             self.model = AutoModelForSequenceClassification.from_pretrained(

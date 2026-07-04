@@ -5,15 +5,12 @@ Provides TF-IDF vectorization with Logistic Regression and Random Forest classif
 Includes feature importance extraction for explainability.
 """
 
-import json
-from pathlib import Path
 
 import numpy as np
 import structlog
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
-from sklearn.pipeline import Pipeline
 
 from app.core.config import get_settings
 

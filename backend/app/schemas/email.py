@@ -4,8 +4,9 @@ PhishGuard AI — Email Schemas
 Pydantic models for email scan input, output, and all analysis sub-components.
 """
 
-from pydantic import BaseModel, Field
 from typing import Any
+
+from pydantic import BaseModel, Field
 
 
 class EmailInput(BaseModel):

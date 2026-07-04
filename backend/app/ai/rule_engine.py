@@ -6,7 +6,7 @@ financial fraud, social engineering, and more. Each rule produces a scored indic
 """
 
 import re
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 
 @dataclass

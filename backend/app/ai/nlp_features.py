@@ -6,7 +6,7 @@ urgency score, readability, action verbs, imperative language detection.
 """
 
 import re
-import math
+
 import structlog
 
 logger = structlog.get_logger(__name__)

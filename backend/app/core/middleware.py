@@ -6,7 +6,7 @@ Security headers, request logging, and rate limiting middleware.
 
 import time
 from collections import defaultdict
-from typing import Callable
+from collections.abc import Callable
 
 import structlog
 from fastapi import Request, Response

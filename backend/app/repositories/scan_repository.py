@@ -7,8 +7,10 @@ Handles all scan result persistence and retrieval operations via MongoDB.
 import csv
 import io
 import json
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
+
+from pymongo import ReturnDocument
 
 from app.core.security import generate_uuid
 from app.database.mongodb import (
@@ -16,8 +18,6 @@ from app.database.mongodb import (
     get_collection,
     paginate_query,
 )
-from pymongo import ReturnDocument
-
 from app.repositories.base import BaseRepository
 
 
@@ -53,7 +53,7 @@ class ScanRepository(BaseRepository):
             "model_results": self._coerce_json(data.get("model_results"), {}),
             "processing_time_ms": float(data.get("processing_time_ms", 0)),
             "is_favorite": bool(data.get("is_favorite", False)),
-            "created_at": datetime.now(timezone.utc).isoformat(),
+            "created_at": datetime.now(UTC).isoformat(),
         }
         self.collection.insert_one(record)
         return record
