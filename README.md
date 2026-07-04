@@ -35,23 +35,34 @@ PhishGuard shows how **deterministic heuristics**, **classical ML**, **transform
 
 ---
 
-## Live Demo
-
-**Live deployment:** Coming soon · **Demo video:** Coming soon
-
-> Record a 30-second walkthrough (`Load Example` → `Analyze Email` → Report) and add it here or as `docs/screenshots/demo.gif`.
-
----
-
 ## Screenshots
 
-| Dashboard | Scanner |
-|-----------|---------|
-| ![Threat Dashboard](docs/screenshots/dashboard.png) | ![Email Scanner](docs/screenshots/scanner.png) |
+Real UI from a local run — hybrid scan pipeline, MongoDB-backed history, and CV metrics on the [demonstration dataset](#dataset).
 
-| History | Models | Settings |
-|---------|--------|----------|
-| ![Scan History](docs/screenshots/history.png) | ![Model Analysis](docs/screenshots/models.png) | ![Settings](docs/screenshots/settings.png) |
+### Dashboard
+Threat overview with trend charts, classification breakdown, and KPI cards.
+
+![Threat dashboard — scans, trends, and classification breakdown](docs/screenshots/dashboard.png)
+
+### Email Scanner
+Split-pane analyzer with risk score, probability breakdown, AI explanation, and sender trust.
+
+![Email scanner — hybrid pipeline results with risk gauge and AI explanation](docs/screenshots/scanner.png)
+
+### Scan History
+Searchable history with classification filters and CSV/JSON export.
+
+![Scan history — filtered table with safe and phishing results](docs/screenshots/history.png)
+
+### Model Analysis
+Cross-validated ML metrics, ensemble weights, and runtime engine status.
+
+![Model analysis — LR/RF F1 scores and hybrid architecture status](docs/screenshots/models.png)
+
+### Settings
+Infrastructure health, ML evaluation metrics, and roadmap.
+
+![Settings — MongoDB Atlas status, CV metrics, and project roadmap](docs/screenshots/settings.png)
 
 ---
 
