@@ -1,0 +1,28 @@
+# Build stage
+FROM node:20-alpine as builder
+
+WORKDIR /app
+
+# Copy package files
+COPY package.json package-lock.json* ./
+
+# Install dependencies
+RUN npm ci || npm install
+
+# Copy application source
+COPY . .
+
+# Build the application
+RUN npm run build
+
+# Production stage
+FROM nginx:alpine
+
+# Copy built assets from builder
+COPY --from=builder /app/dist /usr/share/nginx/html
+
+# Expose port (handled by docker-compose)
+EXPOSE 80
+
+# Command to run nginx
+CMD ["nginx", "-g", "daemon off;"]
