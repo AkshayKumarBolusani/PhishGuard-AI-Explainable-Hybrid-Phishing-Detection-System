@@ -1,0 +1,50 @@
+# Build stage
+FROM python:3.12-slim as builder
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install poetry or use pip for standard deployment
+WORKDIR /app
+COPY pyproject.toml ./
+
+# Since we don't have a poetry.lock yet, we use standard pip installation
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir .
+
+# Final stage
+FROM python:3.12-slim
+
+# Install runtime dependencies (e.g., for model inference if needed)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# Copy installed packages from builder
+COPY --from=builder /usr/local/lib/python3.12/site-packages/ /usr/local/lib/python3.12/site-packages/
+COPY --from=builder /usr/local/bin/ /usr/local/bin/
+
+# Copy application code
+COPY . /app/
+
+# Download spaCy model (English core web sm)
+RUN python -m spacy download en_core_web_sm
+
+# Pre-train the ML models during build to ensure they are available on startup
+# RUN python -m app.ai.models.train
+
+# Expose port
+EXPOSE 8000
+
+# Set environment variables
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    APP_ENV=production \
+    LOG_LEVEL=INFO
+
+# Command to run the application
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
