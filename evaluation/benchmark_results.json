@@ -1,0 +1,188 @@
+{
+  "benchmark": "Phishing Email Curated Datasets, Zenodo DOI 10.5281/zenodo.8339691 (CC-BY-4.0)",
+  "mirror": "kudzaiprichard/aura-phishing-email-corpus (MD5-verified)",
+  "protocol": "stratified 5-fold CV, random_state=42, identical splits for all models",
+  "note": "Binary labels (1=phishing, 0=legitimate). Repo 'suspicious' class absent. Transformer layer excluded (configurable/untrained in repo). Demo-130 numbers are pipeline-validation only and are NOT reported here.",
+  "corpora": [
+    {
+      "corpus": "TREC_07",
+      "n": 53757,
+      "n_phishing": 29399,
+      "description": "TREC 2007 spam track (53,757 emails)",
+      "results": {
+        "pilfer_rf": {
+          "accuracy": 0.8406,
+          "precision_phishing": 0.7906,
+          "recall_phishing": 0.9638,
+          "f1_phishing": 0.8687,
+          "f1_macro": 0.833
+        },
+        "tfidf_lr": {
+          "accuracy": 0.9938,
+          "precision_phishing": 0.9914,
+          "recall_phishing": 0.9972,
+          "f1_phishing": 0.9943,
+          "f1_macro": 0.9937
+        },
+        "tfidf_svm": {
+          "accuracy": 0.996,
+          "precision_phishing": 0.9948,
+          "recall_phishing": 0.9979,
+          "f1_phishing": 0.9964,
+          "f1_macro": 0.996
+        },
+        "phishguard_hybrid": {
+          "accuracy": 0.9846,
+          "precision_phishing": 0.9962,
+          "recall_phishing": 0.9756,
+          "f1_phishing": 0.9858,
+          "f1_macro": 0.9845
+        }
+      }
+    },
+    {
+      "corpus": "CEAS_08",
+      "n": 39154,
+      "n_phishing": 21842,
+      "description": "CEAS 2008 challenge (39,154 emails)",
+      "results": {
+        "pilfer_rf": {
+          "accuracy": 0.7934,
+          "precision_phishing": 0.9493,
+          "recall_phishing": 0.665,
+          "f1_phishing": 0.7822,
+          "f1_macro": 0.7928
+        },
+        "tfidf_lr": {
+          "accuracy": 0.995,
+          "precision_phishing": 0.9963,
+          "recall_phishing": 0.9947,
+          "f1_phishing": 0.9955,
+          "f1_macro": 0.9949
+        },
+        "tfidf_svm": {
+          "accuracy": 0.9973,
+          "precision_phishing": 0.9977,
+          "recall_phishing": 0.9975,
+          "f1_phishing": 0.9976,
+          "f1_macro": 0.9973
+        },
+        "phishguard_hybrid": {
+          "accuracy": 0.9783,
+          "precision_phishing": 0.9989,
+          "recall_phishing": 0.9621,
+          "f1_phishing": 0.9802,
+          "f1_macro": 0.9781
+        }
+      }
+    },
+    {
+      "corpus": "Nazario_5",
+      "n": 3065,
+      "n_phishing": 1565,
+      "description": "Nazario phishing + legitimate (3,065 emails)",
+      "results": {
+        "pilfer_rf": {
+          "accuracy": 0.7214,
+          "precision_phishing": 0.6556,
+          "recall_phishing": 0.9572,
+          "f1_phishing": 0.7782,
+          "f1_macro": 0.7018
+        },
+        "tfidf_lr": {
+          "accuracy": 0.9905,
+          "precision_phishing": 0.9929,
+          "recall_phishing": 0.9885,
+          "f1_phishing": 0.9907,
+          "f1_macro": 0.9905
+        },
+        "tfidf_svm": {
+          "accuracy": 0.9954,
+          "precision_phishing": 0.9968,
+          "recall_phishing": 0.9942,
+          "f1_phishing": 0.9955,
+          "f1_macro": 0.9954
+        },
+        "phishguard_hybrid": {
+          "accuracy": 0.9361,
+          "precision_phishing": 0.9978,
+          "recall_phishing": 0.8767,
+          "f1_phishing": 0.9333,
+          "f1_macro": 0.9359
+        }
+      }
+    },
+    {
+      "corpus": "Nigerian_5",
+      "n": 6331,
+      "n_phishing": 3332,
+      "description": "Nigerian fraud + legitimate (6,331 emails)",
+      "results": {
+        "pilfer_rf": {
+          "accuracy": 0.6636,
+          "precision_phishing": 0.624,
+          "recall_phishing": 0.9079,
+          "f1_phishing": 0.7396,
+          "f1_macro": 0.6322
+        },
+        "tfidf_lr": {
+          "accuracy": 0.9926,
+          "precision_phishing": 0.9997,
+          "recall_phishing": 0.9862,
+          "f1_phishing": 0.9929,
+          "f1_macro": 0.9926
+        },
+        "tfidf_svm": {
+          "accuracy": 0.9953,
+          "precision_phishing": 0.9997,
+          "recall_phishing": 0.9913,
+          "f1_phishing": 0.9955,
+          "f1_macro": 0.9953
+        },
+        "phishguard_hybrid": {
+          "accuracy": 0.9788,
+          "precision_phishing": 0.9997,
+          "recall_phishing": 0.9601,
+          "f1_phishing": 0.9795,
+          "f1_macro": 0.9788
+        }
+      }
+    },
+    {
+      "corpus": "SpamAssasin",
+      "n": 5809,
+      "n_phishing": 1718,
+      "description": "SpamAssassin corpus (5,809 emails)",
+      "results": {
+        "pilfer_rf": {
+          "accuracy": 0.8167,
+          "precision_phishing": 0.647,
+          "recall_phishing": 0.8364,
+          "f1_phishing": 0.7296,
+          "f1_macro": 0.7955
+        },
+        "tfidf_lr": {
+          "accuracy": 0.984,
+          "precision_phishing": 0.9662,
+          "recall_phishing": 0.9802,
+          "f1_phishing": 0.9731,
+          "f1_macro": 0.9809
+        },
+        "tfidf_svm": {
+          "accuracy": 0.9904,
+          "precision_phishing": 0.9815,
+          "recall_phishing": 0.986,
+          "f1_phishing": 0.9837,
+          "f1_macro": 0.9884
+        },
+        "phishguard_hybrid": {
+          "accuracy": 0.9496,
+          "precision_phishing": 0.985,
+          "recall_phishing": 0.8423,
+          "f1_phishing": 0.9081,
+          "f1_macro": 0.9367
+        }
+      }
+    }
+  ]
+}
