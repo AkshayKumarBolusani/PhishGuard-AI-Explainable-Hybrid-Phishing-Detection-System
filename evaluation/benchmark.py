@@ -17,7 +17,7 @@ Models (all on identical stratified 5-fold splits, random_state=42):
                       Transformer layer excluded (configurable/untrained in repo).
                       "Suspicious" class absent from public corpora (binary labels).
 
-Metrics: accuracy, precision, recall, F1 on the phishing class + macro F1,
+Metrics: accuracy, precision, recall, F1 on the positive class (corpus-specific) + macro F1,
 reported as 5-fold mean ± std. Demo-130 numbers are NOT used here.
 """
 import json
@@ -36,12 +36,12 @@ from sklearn.metrics import (accuracy_score, f1_score, precision_score,
 from sklearn.model_selection import StratifiedKFold
 from sklearn.svm import LinearSVC
 
-sys.path.insert(0, str(Path(__file__).parent / "repo" / "backend"))
+sys.path.insert(0, str(Path(__file__).parent.parent / "backend"))
 from app.ai.rule_engine import RuleEngine  # noqa: E402  (pure-python, no deps)
 
-BASE = Path(__file__).parent
+BASE = Path(__file__).parent.parent
 DATA = BASE / "data"
-OUT = BASE / "evaluation"
+OUT = Path(__file__).parent
 OUT.mkdir(exist_ok=True)
 
 CORPORA = {
@@ -193,7 +193,7 @@ def main():
     all_results = {"benchmark": "Phishing Email Curated Datasets, Zenodo DOI 10.5281/zenodo.8339691 (CC-BY-4.0)",
                    "mirror": "kudzaiprichard/aura-phishing-email-corpus (MD5-verified)",
                    "protocol": "stratified 5-fold CV, random_state=42, identical splits for all models",
-                   "note": "Binary labels (1=phishing, 0=legitimate). Repo 'suspicious' class absent. "
+                   "note": "Binary labels (1=positive class, 0=legitimate). Positive-class semantics are corpus-specific: spam (TREC_07, CEAS_08, SpamAssasin), phishing (Nazario_5), advance-fee fraud (Nigerian_5). Scores are per-corpus, not a pooled phishing-detection claim. Repo 'suspicious' class absent. "
                            "Transformer layer excluded (configurable/untrained in repo). "
                            "Demo-130 numbers are pipeline-validation only and are NOT reported here.",
                    "corpora": []}

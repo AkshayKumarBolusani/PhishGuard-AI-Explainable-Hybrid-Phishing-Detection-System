@@ -1,0 +1,36 @@
+{
+  "corpus": "Nigerian_5",
+  "n": 6315,
+  "n_phishing": 3318,
+  "description": "Nigerian fraud + legitimate (6,331 emails)",
+  "results": {
+    "pilfer_rf": {
+      "accuracy": 0.6619,
+      "precision_phishing": 0.622,
+      "recall_phishing": 0.9087,
+      "f1_phishing": 0.7385,
+      "f1_macro": 0.6302
+    },
+    "tfidf_lr": {
+      "accuracy": 0.9926,
+      "precision_phishing": 0.9997,
+      "recall_phishing": 0.9861,
+      "f1_phishing": 0.9929,
+      "f1_macro": 0.9925
+    },
+    "tfidf_svm": {
+      "accuracy": 0.9956,
+      "precision_phishing": 0.9997,
+      "recall_phishing": 0.9919,
+      "f1_phishing": 0.9958,
+      "f1_macro": 0.9956
+    },
+    "phishguard_hybrid": {
+      "accuracy": 0.98,
+      "precision_phishing": 0.9997,
+      "recall_phishing": 0.9623,
+      "f1_phishing": 0.9807,
+      "f1_macro": 0.98
+    }
+  }
+}

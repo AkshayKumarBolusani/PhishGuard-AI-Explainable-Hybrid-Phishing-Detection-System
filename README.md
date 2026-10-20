@@ -160,28 +160,31 @@ flowchart TD
 Measured 2026-10-18 on the **Phishing Email Curated Datasets** (Zenodo DOI
 [10.5281/zenodo.8339691](https://doi.org/10.5281/zenodo.8339691), CC-BY-4.0):
 stratified 5-fold CV, identical splits for all models, metrics on pooled
-out-of-fold predictions (precision / recall / F1 on the phishing class).
-Full report: `evaluation/BENCHMARK_REPORT.md` in the benchmark workspace.
+out-of-fold predictions (precision / recall / F1 on each corpus's positive
+class). The positive class is corpus-specific — *spam* for TREC_07, CEAS_08
+and SpamAssassin, *phishing* for Nazario_5, *advance-fee fraud* for
+Nigerian_5 — so these are per-corpus scores, not a single pooled phishing
+number. Full report: `evaluation/BENCHMARK_REPORT.md`.
 
-| Corpus (n) | Model | Precision | Recall | F1 (phish) |
-|---|---|---|---|---|
-| TREC_07 (53,757) | TF-IDF + SVM | 0.9948 | 0.9979 | **0.9964** |
-| TREC_07 (53,757) | PhishGuard hybrid | **0.9962** | 0.9756 | 0.9858 |
-| CEAS_08 (39,154) | TF-IDF + SVM | 0.9977 | 0.9975 | **0.9976** |
-| CEAS_08 (39,154) | PhishGuard hybrid | **0.9989** | 0.9621 | 0.9802 |
-| Nazario_5 (3,065) | TF-IDF + SVM | 0.9968 | 0.9942 | **0.9955** |
-| Nazario_5 (3,065) | PhishGuard hybrid | **0.9978** | 0.8767 | 0.9333 |
-| Nigerian_5 (6,331) | TF-IDF + SVM | 0.9997 | 0.9913 | **0.9955** |
-| Nigerian_5 (6,331) | PhishGuard hybrid | 0.9997 | 0.9601 | 0.9795 |
-| SpamAssassin (5,809) | TF-IDF + SVM | 0.9815 | 0.9860 | **0.9837** |
-| SpamAssassin (5,809) | PhishGuard hybrid | **0.9850** | 0.8423 | 0.9081 |
+| Corpus (n) | Positive = | Model | Precision | Recall | F1 |
+|---|---|---|---|---|---|
+| TREC_07 (53,757) | spam | TF-IDF + SVM | 0.9948 | 0.9979 | **0.9964** |
+| TREC_07 (53,757) | spam | PhishGuard hybrid | **0.9962** | 0.9756 | 0.9858 |
+| CEAS_08 (39,154) | spam | TF-IDF + SVM | 0.9977 | 0.9975 | **0.9976** |
+| CEAS_08 (39,154) | spam | PhishGuard hybrid | **0.9989** | 0.9621 | 0.9802 |
+| Nazario_5 (3,065) | phishing | TF-IDF + SVM | 0.9968 | 0.9942 | **0.9955** |
+| Nazario_5 (3,065) | phishing | PhishGuard hybrid | **0.9978** | 0.8767 | 0.9333 |
+| Nigerian_5 (6,331) | fraud | TF-IDF + SVM | 0.9997 | 0.9913 | **0.9955** |
+| Nigerian_5 (6,331) | fraud | PhishGuard hybrid | 0.9997 | 0.9601 | 0.9795 |
+| SpamAssassin (5,809) | spam | TF-IDF + SVM | 0.9815 | 0.9860 | **0.9837** |
+| SpamAssassin (5,809) | spam | PhishGuard hybrid | **0.9850** | 0.8423 | 0.9081 |
 
 Baselines: PILFER-style heuristic features + RF (F1 0.73–0.87 across corpora) and
 TF-IDF + Logistic Regression (F1 0.97–1.00). Honest reading: the hybrid does not
-beat TF-IDF + SVM on F1 — it trades recall for the highest precision on most
-corpora plus deterministic, explainable rule signals. The contribution is the
-SOC-triage workflow and explainability, not accuracy SOTA. SOC triage-time impact
-is not yet measured (protocol defined, pilot pending).
+beat TF-IDF + SVM on F1 — on these corpora and splits it trades recall for the
+highest precision on most corpora plus deterministic, explainable rule signals.
+The contribution is the SOC-triage workflow and explainability, not accuracy SOTA.
+SOC triage-time impact is not yet measured (protocol defined, pilot pending).
 
 ### API Reference
 

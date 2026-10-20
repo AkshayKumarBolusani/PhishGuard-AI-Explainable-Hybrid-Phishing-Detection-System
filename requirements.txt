@@ -1,0 +1,9 @@
+# PhishGuard paper — benchmark reproduction dependencies
+# Purpose: reproduce the benchmark in evaluation/ (see evaluation/README.md
+# and evaluation/BENCHMARK_REPORT.md) for the PhishGuard paper.
+# Python: 3.12.3
+# Pinned: 2026-10-20 (versions taken from the working benchmark environment)
+numpy==2.5.4
+pandas==3.0.6
+scikit-learn==1.9.1
+scipy==1.18.1

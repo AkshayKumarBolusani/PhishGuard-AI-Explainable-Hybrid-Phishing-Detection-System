@@ -1,0 +1,36 @@
+{
+  "corpus": "CEAS_08",
+  "n": 39145,
+  "n_phishing": 21833,
+  "description": "CEAS 2008 challenge (39,154 emails)",
+  "results": {
+    "pilfer_rf": {
+      "accuracy": 0.7935,
+      "precision_phishing": 0.9498,
+      "recall_phishing": 0.665,
+      "f1_phishing": 0.7823,
+      "f1_macro": 0.793
+    },
+    "tfidf_lr": {
+      "accuracy": 0.9951,
+      "precision_phishing": 0.9965,
+      "recall_phishing": 0.9947,
+      "f1_phishing": 0.9956,
+      "f1_macro": 0.995
+    },
+    "tfidf_svm": {
+      "accuracy": 0.9974,
+      "precision_phishing": 0.9978,
+      "recall_phishing": 0.9976,
+      "f1_phishing": 0.9977,
+      "f1_macro": 0.9974
+    },
+    "phishguard_hybrid": {
+      "accuracy": 0.9779,
+      "precision_phishing": 0.9989,
+      "recall_phishing": 0.9615,
+      "f1_phishing": 0.9798,
+      "f1_macro": 0.9777
+    }
+  }
+}

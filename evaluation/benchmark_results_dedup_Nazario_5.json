@@ -1,0 +1,36 @@
+{
+  "corpus": "Nazario_5",
+  "n": 3063,
+  "n_phishing": 1564,
+  "description": "Nazario phishing + legitimate (3,065 emails)",
+  "results": {
+    "pilfer_rf": {
+      "accuracy": 0.7212,
+      "precision_phishing": 0.6554,
+      "recall_phishing": 0.9572,
+      "f1_phishing": 0.7781,
+      "f1_macro": 0.7016
+    },
+    "tfidf_lr": {
+      "accuracy": 0.9909,
+      "precision_phishing": 0.9929,
+      "recall_phishing": 0.9891,
+      "f1_phishing": 0.991,
+      "f1_macro": 0.9909
+    },
+    "tfidf_svm": {
+      "accuracy": 0.9944,
+      "precision_phishing": 0.9962,
+      "recall_phishing": 0.993,
+      "f1_phishing": 0.9946,
+      "f1_macro": 0.9944
+    },
+    "phishguard_hybrid": {
+      "accuracy": 0.9386,
+      "precision_phishing": 0.9978,
+      "recall_phishing": 0.8817,
+      "f1_phishing": 0.9362,
+      "f1_macro": 0.9385
+    }
+  }
+}

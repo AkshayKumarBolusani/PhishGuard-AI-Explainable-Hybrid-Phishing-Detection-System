@@ -4,11 +4,12 @@
 \usepackage{graphicx}
 \usepackage{booktabs}
 \usepackage[hidelinks]{hyperref}
+\hypersetup{pdftitle={PhishGuard: An Explainable Hybrid System for Malicious Email Triage}, pdfauthor={Akshay Kumar Bolusani}}
 \usepackage{url}
 
 \begin{document}
 
-\title{PhishGuard: An Explainable Hybrid System for Phishing Email Triage}
+\title{PhishGuard: An Explainable Hybrid System for Malicious Email Triage}
 
 \author{\IEEEauthorblockN{Akshay Kumar Bolusani}
 \IEEEauthorblockA{ProjectKaro, Hyderabad, India\\
@@ -21,29 +22,37 @@ akshaykumarbolusani@gmail.com\\
 \begin{abstract}
 Security operations centers drown in suspicious email. Every false positive
 costs an analyst minutes they do not have. And a bare verdict such as
-``phishing: 92\%'' is useless in an incident report. There is nothing to
+``malicious: 92\%'' is useless in an incident report. There is nothing to
 quote and nothing to defend. PhishGuard is an open-source triage platform
 built around that reality. Its detection core pairs a deterministic 29-rule
-heuristic engine with TF-IDF statistical classifiers in a fixed weighted
-ensemble, and every decision ships with an analyst-readable report
-explaining it.
+heuristic engine, aimed at phishing indicators, with TF-IDF statistical
+classifiers in a fixed weighted ensemble, and every decision ships with an
+analyst-readable report listing the evidence behind it.
 
-We benchmarked the core on five public corpora, 108,116 emails in total:
-TREC 2007, CEAS 2008, Nazario, Nigerian fraud, and SpamAssassin. Stratified
-5-fold cross-validation, identical splits for every model, no exceptions.
-Three baselines: a PILFER-style heuristic feature set with random forest,
-TF-IDF with logistic regression, and TF-IDF with a linear SVM.
+We benchmarked the core on five public corpora, 108,116 emails in total,
+spanning spam, phishing, and advance-fee fraud. The collection is curated for
+phishing-email research \cite{phishcurated,champa2024curated}, but the label
+semantics differ per corpus: the positive class means \textit{spam} for
+TREC\_07, CEAS\_08, and SpamAssassin, \textit{phishing} for Nazario\_5, and
+\textit{advance-fee fraud} for Nigerian\_5. We report scores against each
+corpus's own positive class. No pooled ``phishing detection'' number is
+claimed. Evaluation uses stratified 5-fold cross-validation with identical
+splits for every model. Baselines: a PILFER-style heuristic feature set with
+random forest, TF-IDF with logistic regression, and TF-IDF with a linear SVM.
 
-The hybrid reaches F1 scores of 0.908--0.986 and takes the best precision on
-four of five corpora (0.985--1.000). The TF-IDF SVM wins F1 on all five
-(0.984--0.998). That gap is the finding, not an embarrassment. The rule
-layer trades 1 to 14 points of recall for precision and per-indicator
-evidence. Where false alarms are expensive, that is a trade worth making.
-Code, protocol, and results are public.
+The hybrid reaches F1 scores of 0.908--0.986 on the per-corpus positive class
+and takes the best precision on four of five corpora (0.985--1.000). The
+TF-IDF SVM wins F1 on all five (0.984--0.998). That gap is the finding, not
+an embarrassment. The rule layer trades 1 to 14 points of recall for
+precision and per-indicator evidence. On these corpora and splits, where
+false alarms are expensive, that is a trade worth making. We do not claim it
+proves superiority in operational SOC environments. Code, protocol, and
+results are public.
 \end{abstract}
 
 \begin{IEEEkeywords}
-phishing detection, explainable AI, hybrid systems, SOC triage, email security
+malicious email detection, explainable AI, hybrid systems, SOC triage, spam
+and phishing
 \end{IEEEkeywords}
 
 \section{Introduction}
@@ -65,20 +74,22 @@ ever since \cite{sahingoz2019}. Then explainability became a goal in its own
 right. EXPLICATE couples a classifier with LIME/SHAP explanations rendered
 into plain language by a large language model \cite{explicate}. What we could
 not find was an open, deployable triage system aimed at the analyst instead
-of the end user, evaluated on public corpora, that reports the full cost of
-bolting a deterministic rule layer onto statistical classifiers rather than
-claiming a win on accuracy.
+of the end user, evaluated on public corpora spanning spam, phishing, and
+fraud, that reports the full cost of bolting a deterministic rule layer onto
+statistical classifiers rather than claiming a win on accuracy.
 
 PhishGuard is that system. A FastAPI/React/MongoDB platform whose detection
-core fuses a 29-rule heuristic engine with TF-IDF classifiers under a fixed
-weighted vote, with LLM-written analyst reports on every verdict. Three
-contributions. First, the system itself, designed around precision and
-evidence for SOC workflows. Second, a public benchmark of the detection core
-on five standard corpora, 108,116 emails, against three baselines, all on
-identical cross-validation splits. Third, an honest account of where the
-hybrid helps (precision, explainability) and where it hurts (recall, F1)
-next to pure statistical models. Everything needed to reproduce the work is
-released.
+core fuses a 29-rule phishing-indicator engine with TF-IDF classifiers under
+a fixed weighted vote, with evidence-bearing analyst reports on every
+verdict. Three contributions. First, the system itself: deployable,
+precision-oriented email triage combining deterministic phishing indicators
+with statistical classifiers. Second, a public benchmark of the detection
+core, evaluated separately on public spam, phishing, and advance-fee-fraud
+corpora (108,116 emails), against three baselines, all on identical
+cross-validation splits, with per-corpus label semantics stated explicitly.
+Third, an honest account of where the hybrid helps (precision, evidence) and
+where it hurts (recall, F1) next to pure statistical models. Everything
+needed to reproduce the work is released.
 
 Section~II covers related work, Section~III the architecture, Section~IV the
 evaluation protocol, Section~V the results, Section~VI limitations and future
@@ -104,15 +115,20 @@ reports 98.4\% accuracy alongside measured explanation quality, shipped as a
 GUI and browser extension for end users. The audience is the difference.
 PhishGuard writes for the SOC analyst: indicators with quoted matched text,
 URL and sender findings, a recommended action. The explanation lives inside
-an alert-triage workflow, not a consumer tool.
+an alert-triage workflow, not a consumer tool. We describe these reports as a
+system feature; without a user study we make no claim that they measurably
+improve analyst decisions or save time.
 
 \textbf{Evaluation practice.} Too many detectors are evaluated on private or
 single corpora. Comparison becomes impossible. The TREC Spam Track was an
 early attempt at a shared framework with public corpora such as trec07p
 \cite{trec07}. We evaluate on the public \textit{Phishing Email Curated
-Datasets} collection (Zenodo DOI 10.5281/zenodo.8339691) \cite{phishcurated},
-spanning the TREC 2007 and CEAS 2008 tracks plus Nazario, Nigerian-fraud, and
-SpamAssassin messages. The exact protocol and code are published with this
+Datasets} collection (Zenodo DOI 10.5281/zenodo.8339691)
+\cite{phishcurated,champa2024curated}, which spans the TREC 2007 and CEAS
+2008 tracks plus Nazario, Nigerian-fraud, and SpamAssassin messages. The
+collection is presented for phishing-email research, but its constituent
+labels are not all phishing labels; Section~IV states the per-corpus
+semantics explicitly, and the exact protocol and code are published with this
 paper.
 
 \section{System Architecture}
@@ -131,7 +147,9 @@ Deterministic signals fire fast and never depend on model state. And the
 whole thing runs self-hosted, triaging each email in under a second.
 
 \subsection{Rule Engine}
-29 compiled regular-expression rules in ten categories (Table~\ref{tab:rules}).
+29 compiled regular-expression rules in ten categories (Table~\ref{tab:rules}),
+aimed at phishing indicators: credential harvesting, brand impersonation,
+urgency and threat language, financial-fraud lures, and technical deception.
 Each match carries a severity, low to critical, and a confidence. A 0--100
 risk score and 3-class probabilities (safe/suspicious/phishing) come from
 severity-weighted aggregation. Typical latency is about 5\,ms per email.
@@ -183,36 +201,47 @@ URL analysis scores every link for suspiciousness. Sender-trust scoring and
 NLP urgency features complete the picture. An LLM explainer turns all of it
 into an analyst-style report: executive summary, classification with
 confidence, indicators with quoted evidence, URL and sender findings, attack
-type, recommended actions. Around the core sits the platform. 17 REST
-endpoints. A React dashboard with threat overview, split-pane scanner, and
-searchable history exporting to CSV and JSON. MongoDB persistence. A feedback
-endpoint where analysts can correct verdicts.
+type, recommended actions. These reports are a system feature; we do not
+claim measured improvements in analyst speed or decision quality. Around the
+core sits the platform. 17 REST endpoints. A React dashboard with threat
+overview, split-pane scanner, and searchable history exporting to CSV and
+JSON. MongoDB persistence. A feedback endpoint where analysts can correct
+verdicts.
 
 \section{Evaluation}
-\subsection{Corpora}
-Table~\ref{tab:corpora} summarizes the five corpora from \cite{phishcurated},
-with 1 as phishing and 0 as legitimate. The TREC 2007 messages are the
-track's public trec07p set, distributed under its standard evaluation
-framework \cite{trec07}. Every file was MD5-checked against the
-Zenodo-published checksums. Email text is subject plus body. HTML is kept
-as-is so the link-manipulation features see the original markup.
+\subsection{Corpora and label semantics}
+Table~\ref{tab:corpora} summarizes the five corpora from
+\cite{phishcurated,champa2024curated} (1 = positive class, 0 = negative class).
+The collection is curated for phishing-email research, but the positive class
+does \textit{not} mean phishing everywhere. For TREC\_07, CEAS\_08, and
+SpamAssassin it means \textit{spam}, inherited from their source spam
+evaluations (TREC 2007 Spam Track public corpus trec07p \cite{trec07}, the
+CEAS 2008 challenge, and the SpamAssassin public corpus). For Nazario\_5 it
+means \textit{phishing}, and for Nigerian\_5 \textit{advance-fee fraud}. We
+verified the semantics against the source tracks and by inspecting labeled
+examples (e.g., TREC\_07 positives are pharmaceutical spam; Nazario\_5
+positives are credential-harvesting lures). Every file was MD5-checked
+against the Zenodo-published checksums (v1). Email text is subject plus body.
+HTML is kept as-is so the link-manipulation features see the original
+markup.
 
 \begin{table}[htbp]
-\caption{Public evaluation corpora.}
+\caption{Public evaluation corpora. The positive class is corpus-specific;
+scores are reported per corpus, never pooled into a single claim.}
 \label{tab:corpora}
 \centering
 \footnotesize
-\begin{tabular}{@{}lrrr@{}}
+\begin{tabular}{@{}lrrrl@{}}
 \toprule
-Corpus & Messages & Phishing & Legitimate \\
+Corpus & Messages & Pos. & Legit. & Positive = \\
 \midrule
-TREC\_07 (TREC 2007) & 53,757 & 29,399 & 24,358 \\
-CEAS\_08 (CEAS 2008) & 39,154 & 21,842 & 17,312 \\
-Nazario\_5 & 3,065 & 1,565 & 1,500 \\
-Nigerian\_5 & 6,331 & 3,332 & 2,999 \\
-SpamAssassin & 5,809 & 1,718 & 4,091 \\
+TREC\_07 & 53,757 & 29,399 & 24,358 & spam \\
+CEAS\_08 & 39,154 & 21,842 & 17,312 & spam \\
+Nazario\_5 & 3,065 & 1,565 & 1,500 & phishing \\
+Nigerian\_5 & 6,331 & 3,332 & 2,999 & advance-fee fraud \\
+SpamAssassin & 5,809 & 1,718 & 4,091 & spam \\
 \midrule
-Total & 108,116 & 57,856 & 50,260 \\
+Total & 108,116 & 57,856 & 50,260 & --- \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -220,10 +249,20 @@ Total & 108,116 & 57,856 & 50,260 \\
 \subsection{Protocol}
 Stratified 5-fold cross-validation, random state 42, with the \textbf{same
 splits for every model}. The TF-IDF vectorizer is fit on each training fold
-only. No test vocabulary leaks into training. We report accuracy, precision,
-recall, and F1 on the phishing class, plus macro F1, all on pooled
-out-of-fold predictions. The corpora are binary, so the system's
-\textit{suspicious} class is not exercised here.
+only. No test vocabulary leaks into training. We report precision,
+recall, and F1 on the positive class in Table~III, all on pooled
+out-of-fold predictions; the released benchmark outputs additionally record
+accuracy and macro F1 for every model. The corpora are binary, so the system's
+\textit{suspicious} class is not exercised here. On leakage: the heuristic
+rule engine is a deterministic, non-fitted component built from predefined
+regular-expression rules with hardcoded severity weights. Its scores are
+computed independently for each email and use no labels, corpus-level
+statistics, or information from the evaluation folds. TF-IDF vectorization
+and classifier fitting use only the training partition of each fold, and the
+resulting transformations are applied to that fold's held-out partition.
+Exact duplicates are rare
+(0.14\% of TREC\_07 at most, none with conflicting labels); a
+deduplicated-before-split sensitivity rerun is reported in Section~V.
 
 \subsection{Baselines}
 \textit{PILFER-style:} ten hand-crafted URL/HTML features. IP-literal URL,
@@ -241,13 +280,15 @@ figures (LR F1 $0.83 \pm 0.06$, RF F1 $0.85 \pm 0.09$) describe the demo.
 They are \textbf{not} benchmark accuracy and are not presented as results.
 
 \section{Results}
-Table~\ref{tab:results} reports precision, recall, and F1 on the phishing
-class per corpus. Fig.~\ref{fig:results} plots the F1 comparison.
+Table~\ref{tab:results} reports precision, recall, and F1 on the positive
+class per corpus. Fig.~\ref{fig:results} plots the F1 comparison. All scores
+are empirical results on these corpora and splits.
 
 \begin{table}[htbp]
-\caption{Benchmark results: precision / recall / F1 on the phishing class
-(pooled 5-fold out-of-fold predictions). Bold marks the best F1 and the best
-precision within each corpus block.}
+\caption{Benchmark results: precision / recall / F1 on the positive class
+(spam, phishing, or advance-fee fraud depending on corpus; pooled 5-fold
+out-of-fold predictions). Bold marks the best F1 and the best precision
+within each corpus block.}
 \label{tab:results}
 \centering
 \footnotesize
@@ -255,31 +296,31 @@ precision within each corpus block.}
 \toprule
 Model & Precision & Recall & F1 \\
 \midrule
-\multicolumn{4}{@{}l}{\textit{TREC\_07 --- 53,757 emails}} \\
+\multicolumn{4}{@{}l}{\textit{TREC\_07 --- 53,757 emails (positive = spam)}} \\
 PILFER-style RF & 0.791 & 0.964 & 0.869 \\
 TF-IDF + LR & 0.991 & 0.997 & 0.994 \\
 TF-IDF + SVM & 0.995 & 0.998 & \textbf{0.996} \\
 PhishGuard hybrid & \textbf{0.996} & 0.976 & 0.986 \\
 \midrule
-\multicolumn{4}{@{}l}{\textit{CEAS\_08 --- 39,154 emails}} \\
+\multicolumn{4}{@{}l}{\textit{CEAS\_08 --- 39,154 emails (positive = spam)}} \\
 PILFER-style RF & 0.949 & 0.665 & 0.782 \\
 TF-IDF + LR & 0.996 & 0.995 & 0.996 \\
 TF-IDF + SVM & 0.998 & 0.998 & \textbf{0.998} \\
 PhishGuard hybrid & \textbf{0.999} & 0.962 & 0.980 \\
 \midrule
-\multicolumn{4}{@{}l}{\textit{Nazario\_5 --- 3,065 emails}} \\
+\multicolumn{4}{@{}l}{\textit{Nazario\_5 --- 3,065 emails (positive = phishing)}} \\
 PILFER-style RF & 0.656 & 0.957 & 0.778 \\
 TF-IDF + LR & 0.993 & 0.989 & 0.991 \\
 TF-IDF + SVM & 0.997 & 0.994 & \textbf{0.996} \\
 PhishGuard hybrid & \textbf{0.998} & 0.877 & 0.933 \\
 \midrule
-\multicolumn{4}{@{}l}{\textit{Nigerian\_5 --- 6,331 emails}} \\
+\multicolumn{4}{@{}l}{\textit{Nigerian\_5 --- 6,331 emails (positive = fraud)}} \\
 PILFER-style RF & 0.624 & 0.908 & 0.740 \\
 TF-IDF + LR & 1.000 & 0.986 & 0.993 \\
 TF-IDF + SVM & 1.000 & 0.991 & \textbf{0.996} \\
 PhishGuard hybrid & 1.000 & 0.960 & 0.980 \\
 \midrule
-\multicolumn{4}{@{}l}{\textit{SpamAssassin --- 5,809 emails}} \\
+\multicolumn{4}{@{}l}{\textit{SpamAssassin --- 5,809 emails (positive = spam)}} \\
 PILFER-style RF & 0.647 & 0.836 & 0.730 \\
 TF-IDF + LR & 0.966 & 0.980 & 0.973 \\
 TF-IDF + SVM & 0.982 & 0.986 & \textbf{0.984} \\
@@ -291,27 +332,42 @@ PhishGuard hybrid & \textbf{0.985} & 0.842 & 0.908 \\
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\columnwidth]{fig_results.png}
-\caption{F1 score per model and corpus (pooled 5-fold out-of-fold predictions).}
+\caption{F1 score per model and corpus, on each corpus's positive class
+(pooled 5-fold out-of-fold predictions).}
 \label{fig:results}
 \end{figure}
 
-The two large corpora tell a consistent story. On TREC\_07 and CEAS\_08 every
-model is strong. The hybrid takes the best precision observed anywhere, 0.996
-and 0.999, with F1 of 0.986 and 0.980. Just behind the TF-IDF SVM on both.
-Nazario\_5 shows the cost. Hybrid recall drops to 0.877 while precision holds
-at 0.998. The rule layer's conservatism vetoes true positives its statistical
-half would have caught. SpamAssassin is the hardest case for the hybrid:
-recall 0.842, F1 0.908. That makes sense. It is general spam, not pure
-phishing, and the rule engine is tuned for phishing indicators, so its
-contribution shrinks. The PILFER-style baseline behaves the way classical
-heuristics do. High recall, 0.836 to 0.964, with clearly lower precision,
-0.624 to 0.949.
+The two large spam corpora tell a consistent story. On TREC\_07 and CEAS\_08
+every model is strong. The hybrid takes the best precision observed anywhere,
+0.996 and 0.999, with F1 of 0.986 and 0.980. Just behind the TF-IDF SVM on
+both. On the phishing corpus, Nazario\_5, the cost appears: hybrid recall
+drops to 0.877 while precision holds at 0.998. The rule layer's conservatism
+vetoes true positives its statistical half would have caught. SpamAssassin is
+the hardest case for the hybrid: recall 0.842, F1 0.908. That makes sense. It
+is general spam, not phishing, and the rule engine is tuned for phishing
+indicators, so its contribution shrinks. The PILFER-style baseline behaves
+the way classical heuristics do. High recall, 0.836 to 0.964, with clearly
+lower precision, 0.624 to 0.949.
 
 No claim of accuracy superiority here. The hybrid does not win on F1. What
-the numbers show is a documented trade. The deterministic rule layer buys the
-highest precision and per-indicator explanations at a recall cost of 1 to 14
-points depending on the corpus. For triage work where false positives are
-expensive analyst time, that is a defensible place to stand.
+the numbers show is a documented trade, measured separately on spam,
+phishing, and fraud corpora. The deterministic rule layer buys the highest
+precision and per-indicator evidence at a recall cost of 1 to 14 points
+depending on the corpus. On these corpora and splits, for triage work where
+false positives are expensive analyst time, that is a defensible place to
+stand. It is not proof of superiority in an operational SOC.
+
+\subsection{Duplicate sensitivity}
+Exact duplicates (normalized subject plus body) are rare: 74 of 53,757
+messages in TREC\_07 at most, none with conflicting labels. To check whether
+duplicates crossing train/test folds inflate the scores, we reran the full
+protocol with exact duplicates removed \textit{before} the stratified split
+(53,683 kept for TREC\_07; 39,145 for CEAS\_08; 3,063 for Nazario\_5; 6,315
+for Nigerian\_5; 5,809 for SpamAssassin), keeping every other setting
+identical. The largest per-model F1 movement was 0.0029 (Nazario\_5 hybrid,
+0.9333 to 0.9362); all other deltas were at most 0.0012, and SpamAssassin was
+bit-identical. The best-precision and best-F1 orderings were unchanged on all
+five corpora. Duplicates do not drive the findings.
 
 \section{Discussion, Limitations, and Future Work}
 The corpora are binary. So the system's three-way output,
@@ -321,7 +377,9 @@ corpus would be a worthwhile follow-up. The DistilBERT layer sat out this
 build, untrained. Running it through the same protocol is the obvious next
 experiment. The rule-engine thresholds and the 0.35/0.65 ensemble weights are
 shipped defaults, never tuned. Per-deployment calibration should recover some
-of the recall gap. Triage-time reduction in a real SOC is unmeasured. A
+of the recall gap. Cross-dataset evaluation, training on one corpus and
+testing on another, would test generalization harder than random folds do;
+it is future work. Triage-time reduction in a real SOC is unmeasured. A
 protocol for the author's SOC lab exists: 30 real Wazuh alerts, baseline
 versus assisted triage, timed, with a washout period. The study has not run,
 so no such claim is made. Finally, the corpora are English and partly dated.
@@ -329,12 +387,13 @@ Modern spear-phishing, non-English lures, and adversarial evasion of regex
 rules are all untested.
 
 \section{Conclusion}
-PhishGuard is an open, deployable phishing triage platform. Its hybrid core,
-evaluated on 108,116 public emails against three baselines, leads on
-precision at 0.985 to 1.000 while trailing pure TF-IDF models on F1. An
-honest, measured trade-off. It fits precision-sensitive SOC triage and
-arrives with explanations an analyst can act on. Code, protocol, and results
-are released for reproduction.
+PhishGuard is an open, deployable malicious-email triage platform. Its hybrid
+core, evaluated separately on public spam, phishing, and advance-fee-fraud
+corpora (108,116 emails) against three baselines, leads on precision at
+0.985 to 1.000 while trailing pure TF-IDF models on F1. An honest, measured
+trade-off on these corpora and splits. The system ships with
+evidence-bearing analyst reports as a built-in feature. Code, protocol, and
+results are released for reproduction.
 
 \section*{Acknowledgment}
 The manuscript prose was drafted with the assistance of a generative AI
@@ -370,6 +429,11 @@ LLM-powered interpretability,'' \textit{arXiv preprint arXiv:2503.20796
 
 \bibitem{phishcurated} \textit{Phishing Email Curated Datasets}, Zenodo,
 doi:\ 10.5281/zenodo.8339691, 2023. {CC-BY-4.0}.
+
+\bibitem{champa2024curated} A.~I.~Champa, M.~F.~Rabbi, and M.~F.~Zibran,
+``Curated datasets and feature analysis for phishing email detection with
+machine learning,'' in \textit{Proc.\ 3rd IEEE Int.\ Conf.\ Comput.\ and
+Mach.\ Intell.\ (ICMI)}, 2024, pp.\ 1--7.
 \end{thebibliography}
 
 \end{document}

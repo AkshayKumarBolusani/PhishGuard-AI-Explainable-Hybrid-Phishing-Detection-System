@@ -1,0 +1,36 @@
+{
+  "corpus": "SpamAssasin",
+  "n": 5809,
+  "n_phishing": 1718,
+  "description": "SpamAssassin corpus (5,809 emails)",
+  "results": {
+    "pilfer_rf": {
+      "accuracy": 0.8167,
+      "precision_phishing": 0.647,
+      "recall_phishing": 0.8364,
+      "f1_phishing": 0.7296,
+      "f1_macro": 0.7955
+    },
+    "tfidf_lr": {
+      "accuracy": 0.984,
+      "precision_phishing": 0.9662,
+      "recall_phishing": 0.9802,
+      "f1_phishing": 0.9731,
+      "f1_macro": 0.9809
+    },
+    "tfidf_svm": {
+      "accuracy": 0.9904,
+      "precision_phishing": 0.9815,
+      "recall_phishing": 0.986,
+      "f1_phishing": 0.9837,
+      "f1_macro": 0.9884
+    },
+    "phishguard_hybrid": {
+      "accuracy": 0.9496,
+      "precision_phishing": 0.985,
+      "recall_phishing": 0.8423,
+      "f1_phishing": 0.9081,
+      "f1_macro": 0.9367
+    }
+  }
+}

@@ -2,7 +2,7 @@
   "benchmark": "Phishing Email Curated Datasets, Zenodo DOI 10.5281/zenodo.8339691 (CC-BY-4.0)",
   "mirror": "kudzaiprichard/aura-phishing-email-corpus (MD5-verified)",
   "protocol": "stratified 5-fold CV, random_state=42, identical splits for all models",
-  "note": "Binary labels (1=phishing, 0=legitimate). Repo 'suspicious' class absent. Transformer layer excluded (configurable/untrained in repo). Demo-130 numbers are pipeline-validation only and are NOT reported here.",
+  "note": "Binary labels (1=positive class, 0=legitimate). Positive-class semantics are corpus-specific: spam (TREC_07, CEAS_08, SpamAssasin), phishing (Nazario_5), advance-fee fraud (Nigerian_5). Scores are per-corpus, not a pooled phishing-detection claim. Repo 'suspicious' class absent. Transformer layer excluded (configurable/untrained in repo). Demo-130 numbers are pipeline-validation only and are NOT reported here.",
   "corpora": [
     {
       "corpus": "TREC_07",
